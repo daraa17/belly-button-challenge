@@ -17,25 +17,25 @@
   </div>
 
   <script>
-    // Fetch data from JSON file
+    // get data from JSON file
     d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then(data => {
       const names = data.names;
       const samples = data.samples;
 
-      // Populate dropdown menu
+      // create dropdown menu
       const dropdownMenu = d3.select("#selDataset");
       names.forEach(name => {
         dropdownMenu.append("option").attr("value", name).text(name);
       });
 
-      // Function to update charts and metadata
+      // function to update charts and metadata
       function updateCharts(selectedId) {
         const selectedSample = samples.find(sample => sample.id === selectedId);
         const sampleValues = selectedSample.sample_values.slice(0, 10);
         const otuIds = selectedSample.otu_ids.slice(0, 10).map(id => `OTU ${id}`);
         const otuLabels = selectedSample.otu_labels.slice(0, 10);
 
-        // Update bar chart
+        // update bar chart
         const barTrace = {
           x: sampleValues,
           y: otuIds,
@@ -49,7 +49,7 @@
         };
         Plotly.newPlot("bar-chart", [barTrace], barLayout);
 
-        // Update bubble chart
+        // update bubble chart
         const bubbleTrace = {
           x: selectedSample.otu_ids,
           y: selectedSample.sample_values,
@@ -67,7 +67,7 @@
         };
         Plotly.newPlot("bubble-chart", [bubbleTrace], bubbleLayout);
 
-        // Display metadata
+        // display metadata
         const metadata = data.metadata.find(metadata => metadata.id === parseInt(selectedId));
         const metadataDiv = d3.select("#sample-metadata");
         metadataDiv.html("");
@@ -76,10 +76,10 @@
         });
       }
 
-      // Initial update
+      // initial update
       updateCharts(names[0]);
 
-      // Event listener for dropdown change
+      // event listener for dropdown change
       dropdownMenu.on("change", function() {
         const selectedId = this.value;
         updateCharts(selectedId);
